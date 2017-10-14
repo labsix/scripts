@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+set -eu
+
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root"
+    exit 1
+fi
+
+mkuser() {
+    local username=$1
+    id -u $username &>/dev/null && return 0
+    adduser --disabled-password --gecos '' $username
+    # this is only safe to do because we disable password login on all our
+    # machines
+    passwd -de $username # make empty password
+}
+
+add() {
+    local username=$1 && shift
+    mkuser $username
+    mkdir -p /home/$username/.ssh
+    local old_keys=''
+    if [ -f /home/$username/.ssh/authorized_keys ]; then
+        old_keys=$(cat /home/$username/.ssh/authorized_keys)
+    fi
+    # we read the keys into a variable first so we can write back to the same
+    # file
+    (
+    printf '%s\n' "$@";
+    echo "$old_keys"
+    ) | sed '/^$/d' | sort | uniq > /home/$username/.ssh/authorized_keys
+    chown -R $username:$username /home/$username/.ssh
+    chmod 644 /home/$username/.ssh/authorized_keys
+    echo "Synced ssh keys for $username"
+}
+
+add anish \
+    'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCj8Wl9lsvzX3Um92adpl3Ua8aWvOMxtF93vNtl+Ws8C1zR5X51/LIzWrRoR2CROpT+1ZprfzhmN3KbrcpLBXXV/S/RRh/aBCrcmnSUUqCGV/NV7oJ0omAQ6O0xxuYbeUow9ykSg3DmsbET+MQSS8S5WHZxCg2uvBPlxsiijZJH142CcGl9jFml6D/X/cS4jAuhrWIVQhvh+FOufEEd+GUHtYJ7jYFgN/5O1anIvB/GCKqKM9HL+e3wyc5pcNkY+GF2xtRJgP/ZSLlkpqJe64I6Rube549Dui7dB2/Pbi6gHq4t9JQri2NapQXU4pNfKRcunA714TvpEEXB6YuXZy+e5Dm8ppZFbSSToeD3fWErdkaA5538/1FAcfs/Bg+L+QDsG7i3C+EG8C3iSCSI12VxzNk8i1PyW2X4Ylx9XtwOkpVzF1qa/DE0HwaFY1zZHPQgiCAMrm4YpfjnQ/TkNbCCRg4m6z7IARGalS7KW07+ScKM6U+dP5X0sAdFGn6IUJRVktpXjeMJO4L2l7USzOrHbCWD9wM3/+qzVgjB9SxL2+4SdlZ8JpHEfqwVqpqw0GrnXZ2BuNdMBQ6QkeJhtWXdrd/7hmNSohK1o6W0UlWwKTF0GSIYc2tgt/4/J3DTTAGNzqvXf/zpmBOI98tUYG0NkBjLV2BcArJyEwsZmDiQ3w== me@anishathalye.com'
+
+add andrew \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCkPRgWuT4PtqhALQd/eQec0LJ9oQRapHGZSA1+K/B69kUtYiz03GzytfQcFVPfByX0QYxm6XGRtDx8ymKlNZxeWXH6/EOgM7VcgRZNsEfVzlONI8xkcNXaTyt4cQ34VYzh20o1hiTGf3cu/biNCeHZUnY+G2GHd4jvIN7ofIfRxPTN65rtjG0BHgZqgGQN7eugLeBVvLa+x7y93MF5K2ox9vca/KzrplDELvNRzKcxP93YXrxfBGIzvZWpCm7IHEqOqoTZwo4JbfCgxMsrjsD5CvufJ0SWNBUN+IXlbEk2Fv6J8MSGjxlib8l1ysbQ2P5GvPB5s0m+iraFgWJmcRQtnxSN70OAYxDfKUABieXUukcal4z6KNjOAtLOX34mQzQFcjOQc8XZOOmLNhbYRNQoFmpYUMBXQdBtI7QKUvsV15EYWo+31PMHSzW1tam7fQXZqTKpwDAFILPiMppm0/gM0dJyAICeJTvL0rr20XASurZBuHmO/pmHH4m3fcl9HmBU3iyfOedL+nFPbLJGY2hE8AGagz7vuqEJZRnrNTqE3AVM7aUFNBqOZ3R448xJ9W4IvQvCxW0oQ9nQIE9icqtDPqz+jWTKevGXMwyfK28TdMmAlpU9LAB9TtYmU7cMRUqQCg1HkWfYX6eFGBa37HpiPmLyTZj9V/tpTBnJKaupow== ailyas@mit.edu' \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC+Rgy8WanhtKOPAAocGBbyuF0kGg6dktRwhLTfJMJCVs5YjVj6FQQiBxL/LEzXi4VSo83njqGyL22b0PFunC7m9c3TlP5bQaLispfRuWukqE1k58jI6CPUTmpB/E4KYIwyG0UXVJScjtvIwCIXJrEb9RwHZ+hiU1Gm8jgfk1ZytfQuipjP7tgD12sCF6uaDtYXRnEP07yOJ38dWX769CSrhmnLJGaAhEZAnldR0HeNh32DV0dNOMpiinGfZSZIAMLPYxlgwJn4wSfIckOF/TQVoJy7emI0unYvJ5uzhsE4K3cSs56X7YRBt8rPPFKkWHmSYQjGYYkZSQpFFOboxGAn40VtBb+Rb7aKd8B7ga7sw+gdLECZprFu12OYhizzxO1zNC45ZN+hiolFzr9E/1fiqK2Lo0dVarvMojN2VytLpqnWRIj41gwJuOlt9152bGO9kQsqLzeQ5P+GkKjKDLs1aPmkk7G5+3sb+Lz0hOtJIad0oh6urWfBgyfeHYTxL4eLLT+x/Ke7qG8SlBJmj6tTM1dtNIC5Vm32RnmzSK9Y4XNVL9RZHN6gQHPFd5fxbHnW7FM2E7VUO08PE0L01H0pJYWJEusyjPnUdtNH9D0IYMUDA7ILU/fiVjykI/025Vj7zk/UVuY8JanZc13B4YYHTjsmLZlX/d7vyaLUTytixQ==' \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCaQjPeO3ZWP7qDcEZ6vA6Zh4WArJsPs3a/B7Sid3M9pfa82yAylADQF6kjt9XCmqHqMWsI9CY4vtpoKfqImdGryoL4HIMlIvvRQ9kOQVSLmX67pI6sdErsvVM26XJA/HowsGxvG0acvaZK3ngsawpWWlk5oY1B5voNWQfby7lRT8yC8PSDFkOhgWKg2sJTJEX4KH50gEEQrjWMwgH0aL0b1zd0TAcOWDA8FhgPq6VywsAQQjqSSNARzGKL8rL/VGbYS+qV97X5ODg8AugMvehv1Si1+YFZwkbubHD9GDgYY1pmbj4r1rKVcyZLwf8J2tz2UvzUkfwCCnh4NzvzFY1nzJilGWksvdKVqQ6kMt7j+bfW8KmMTXAfQlMOBv0Xaye7rvhRoAGtCFjhE8EOPBDmJG7d4iW88gbigTwYtGAqgI3xCswXyfYs7I4BIny605Wf1IibOROEwQ9Y4bAPNYOlEhwbLdigWIfyHijBR/dKZ1KJ/+wSqee7CYf0/H2nzVNEklujTqY/ZZUWr+fPflETXZz4wrAvTVJY0RRG/RV7V9/ybdAy4sk0WjVDqz6kf1t7nLhcUckvu/xS6UA6sfRbEquPBUksv54xkLlv8Cu5ARnWa27WUi+6H0MvjpbDcnwdS028VyA4om2iL0pjEiA6pQIGr7zY+vsNlPr4kt6kTQ==' \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7eA4GAJNpyFzY4C5o41dbs56OYDSvWhQ24q1A0k5yd7H35ibZBQZRdEzBE1IEIBUR6gWRjSGzc2+1K2jr4+1ZXzoSrMwzPL4VI+rqVxW0+uT5oS1wQOM6gAZSk4ouzkRwe8bnIBugW30xXuZpzBASs8UNHeHO0krX7mMnt9b8WRKHrtZQCQaAEVheLtUHPOrTJyY4MHYRbgI1VhbsqHwDDGbbowCG8qcWByMNKBy2GaYnjVuAameB6mBL68l48nJysNT9wTpGYSynGj5jBPq3sgZ2Yh5J8VngwXXB/0fM5One2vx90uTPbJTeldeuAv1zJtC32W72z0tCZvMa0PuN ailyas@dhcp-18-189-113-162.dyn.mit.edu'
+
+add logan \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDl48Ic6jLYBY/DkqG7v3LtNnfjfN5+nZ54FntCppksGIym2MXtT/v9JNBfJe1ISDgqxnoWCmqoHgVyAF9bjjCgAlRcMfQWg3GTM7dHi6vjkcSJN7EwQaqY6fWeIdSPqDA8w/HwX9s8MSvbxLLXrvPEl4TFW2KvH+oWZAXaXCP4UYuLH0/S9MiKRLyhvf8w1/Xh75IW98Vns21dJeryU9SojtOHbaHahvKMezJWZk+mUL5/L0SVyxFjltSibk7ZqpEExu/MDajBods0gVqHD1szCro6n1A8iXriWFKs1ElvlbcSCWSh8Pt1ZCC5GD1RBWrRNQWJHcs/o8N9InunNmL engstrom@sox2'
+
+add jessy \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDT2VyLxwLsK8W67TMZPXVlcw4eeIaGlNweslJzk6ydI/hTbbcWS3oIu3RJE06NIgndvOEVbMN8uATK5Y6wuStbw8nEMkmGFy1WrOLcDUQzrgwyRYkhzSwzyplSimBxlNaL2knM57DK3W3yJ2m7h9z2/q0b2MMjyfx75yX4/tBlZykK9oKHUHXTb6vj8n2hvnSgjARzbNzDLoygqFiKqMPOzh8uIPD9kQUA5ixUN71FANpPBEglMU42xJG5NjJ2YrM2Qv+2de1Y2oTbpM2sjcmqWQdjKfzAbicrvrDK++BYGvcehFLDoAccnuctNjt/7hcfBAqmkUml5aIolLHe5HN3 jessy@dhcp-18-189-47-97.dyn.mit.edu'
+
+add kevin \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqVZti7BCiCEqJ6DGl4kGF2QQKXebRUKVOZTpsas/YEaaz9Mmf0SYXfMt3JiXlP3YzRNSK1RtRRcvXbncLvkuTVamFTuV9KfOQw13FRqdCvX7sUP1YtQHq48A9m98/1ybMVbTMUZ5yS8Vx/Z+6k1OVQrbiF9Nmi7/8X8hrzd5isiFMMgGw8AD2agTi0OzJr+328qzDdfblb/YCAGa5gBGJaJQTDWQFHMDLC+7dqdInJcc2E4Zrklo1ueOotkUBnRqpWGqhl7AgEdd5x5TCHVnemvPigBXlO4ioCu+ez4Vz6awPQo63f/Fvn6CYnW/RwTTdbIgj5uYDSmdzIYw/1Gxr kevin@Kevins-MacBook-Pro.local' \
+	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCppXmuOfiT5lLCbRQg/jh6Uk2Dp+E074xhk6I5xmP849n7mSRxEBqMsgJzvpctXlrUnq9wSzg/DrUwGX4UOB77RYIP8BlzHxxkr2BQWejp/9feHDxaGgKQnjN0nZXgHif1rhfNXhFog7pYf9CquzbWFy3uOvejEEgGB8FRb2LRG0cHoc5tXCXxcBFa3c3KzavHAhTuklz950cNRYHx2UPz15sRxkbzbLXvGulnxsAexJj/aL3n6ryFPnOHpPERT9DaIxqlC2XysHonb1iXHTGiI7d0ZC2mx/Zcj996wedEDdoj9lFzfOBaN6Kjmcq8Wt8nMltJ0mVh/NyG1uHXUQwP kevin@Kevins-MacBook-Pro.local'
