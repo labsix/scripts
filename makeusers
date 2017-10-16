@@ -7,6 +7,11 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+if ! grep '^PasswordAuthentication no$' /etc/ssh/sshd_config &>/dev/null; then
+    echo "Disable password login in /etc/ssh/sshd_config and then rerun this script"
+    exit 1
+fi
+
 mkuser() {
     local username=$1
     id -u $username &>/dev/null && return 0
