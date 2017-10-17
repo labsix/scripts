@@ -40,6 +40,13 @@ add() {
     echo "Synced ssh keys for $username"
 }
 
+mksudo() {
+    usermod -aG sudo $1
+    echo "Granted sudo privileges to $1"
+}
+
+# Users and SSH Keys
+
 add anish \
     'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCj8Wl9lsvzX3Um92adpl3Ua8aWvOMxtF93vNtl+Ws8C1zR5X51/LIzWrRoR2CROpT+1ZprfzhmN3KbrcpLBXXV/S/RRh/aBCrcmnSUUqCGV/NV7oJ0omAQ6O0xxuYbeUow9ykSg3DmsbET+MQSS8S5WHZxCg2uvBPlxsiijZJH142CcGl9jFml6D/X/cS4jAuhrWIVQhvh+FOufEEd+GUHtYJ7jYFgN/5O1anIvB/GCKqKM9HL+e3wyc5pcNkY+GF2xtRJgP/ZSLlkpqJe64I6Rube549Dui7dB2/Pbi6gHq4t9JQri2NapQXU4pNfKRcunA714TvpEEXB6YuXZy+e5Dm8ppZFbSSToeD3fWErdkaA5538/1FAcfs/Bg+L+QDsG7i3C+EG8C3iSCSI12VxzNk8i1PyW2X4Ylx9XtwOkpVzF1qa/DE0HwaFY1zZHPQgiCAMrm4YpfjnQ/TkNbCCRg4m6z7IARGalS7KW07+ScKM6U+dP5X0sAdFGn6IUJRVktpXjeMJO4L2l7USzOrHbCWD9wM3/+qzVgjB9SxL2+4SdlZ8JpHEfqwVqpqw0GrnXZ2BuNdMBQ6QkeJhtWXdrd/7hmNSohK1o6W0UlWwKTF0GSIYc2tgt/4/J3DTTAGNzqvXf/zpmBOI98tUYG0NkBjLV2BcArJyEwsZmDiQ3w== me@anishathalye.com'
 
@@ -58,3 +65,13 @@ add jessy \
 add kevin \
 	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDqVZti7BCiCEqJ6DGl4kGF2QQKXebRUKVOZTpsas/YEaaz9Mmf0SYXfMt3JiXlP3YzRNSK1RtRRcvXbncLvkuTVamFTuV9KfOQw13FRqdCvX7sUP1YtQHq48A9m98/1ybMVbTMUZ5yS8Vx/Z+6k1OVQrbiF9Nmi7/8X8hrzd5isiFMMgGw8AD2agTi0OzJr+328qzDdfblb/YCAGa5gBGJaJQTDWQFHMDLC+7dqdInJcc2E4Zrklo1ueOotkUBnRqpWGqhl7AgEdd5x5TCHVnemvPigBXlO4ioCu+ez4Vz6awPQo63f/Fvn6CYnW/RwTTdbIgj5uYDSmdzIYw/1Gxr kevin@Kevins-MacBook-Pro.local' \
 	'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCppXmuOfiT5lLCbRQg/jh6Uk2Dp+E074xhk6I5xmP849n7mSRxEBqMsgJzvpctXlrUnq9wSzg/DrUwGX4UOB77RYIP8BlzHxxkr2BQWejp/9feHDxaGgKQnjN0nZXgHif1rhfNXhFog7pYf9CquzbWFy3uOvejEEgGB8FRb2LRG0cHoc5tXCXxcBFa3c3KzavHAhTuklz950cNRYHx2UPz15sRxkbzbLXvGulnxsAexJj/aL3n6ryFPnOHpPERT9DaIxqlC2XysHonb1iXHTGiI7d0ZC2mx/Zcj996wedEDdoj9lFzfOBaN6Kjmcq8Wt8nMltJ0mVh/NyG1uHXUQwP kevin@Kevins-MacBook-Pro.local'
+
+# Sudoers
+#
+# Feel free to add yourself to this list, but keep in mind that if you want
+# sudo powers, you're responsible for being careful to not break boxes, and if
+# something goes wrong, you're responsible for fixing it.
+
+mksudo anish
+mksudo logan
+mksudo andrew
