@@ -33,6 +33,7 @@ main() {
     mksudo anish
     mksudo logan
     mksudo andrew
+    mksudo jessy
 
     # Removed users
     #
