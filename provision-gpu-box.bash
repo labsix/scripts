@@ -55,7 +55,7 @@ main() {
     fetch http://i.anish.io/labsix/cuda_8.0.61_375.26_linux.run    27f3983759fad77bf15c5175cd0351c128386990
     fetch http://i.anish.io/labsix/cudnn-8.0-linux-x64-v6.0.tgz    31cd9e9598c71a182b15668b58ff1e3edbeace2f
     sh NVIDIA-Linux-x86_64-384.69.run -s
-    sh cuda_8.0.61_375.26_linux.run --silent --driver
+    sh cuda_8.0.61_375.26_linux.run --silent --toolkit
     tar xf cudnn-8.0-linux-x64-v6.0.tgz
     cp cuda/include/* /usr/local/cuda/include/
     cp cuda/lib64/* /usr/local/cuda/lib64/
