@@ -52,11 +52,13 @@ main() {
     echo "Installing NVIDIA Drivers, CUDA, and CUDNN."
     cd "$tempdir"
     fetch http://i.anish.io/labsix/NVIDIA-Linux-x86_64-384.69.run  844103837efae773f8cf76a85451b5d730796807
+    fetch http://i.anish.io/labsix/cuda_9.0.176_384.81_linux-run   7e30b16a3bd72c7e67cdf98f3ca62804b1ba7546
     fetch http://i.anish.io/labsix/cuda_8.0.61_375.26_linux.run    27f3983759fad77bf15c5175cd0351c128386990
     fetch http://i.anish.io/labsix/cudnn-8.0-linux-x64-v6.0.tgz    31cd9e9598c71a182b15668b58ff1e3edbeace2f
+    fetch http://i.anish.io/labsix/cudnn-9.0-linux-x64-v7.tgz      21587920256df041fac7846d98f5c71aff4ebdbe
     sh NVIDIA-Linux-x86_64-384.69.run -s
-    sh cuda_8.0.61_375.26_linux.run --silent --toolkit
-    tar xf cudnn-8.0-linux-x64-v6.0.tgz
+    sh cuda_9.0.176_384.81_linux-run --silent --toolkit
+    tar xf cudnn-9.0-linux-x64-v7.tgz
     cp cuda/include/* /usr/local/cuda/include/
     cp cuda/lib64/* /usr/local/cuda/lib64/
 
