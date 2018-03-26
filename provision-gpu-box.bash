@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# This is designed to run on Ubuntu 16.04
+# This is designed to run on Ubuntu 16.04 or Debian 9
 
 set -eu
 
