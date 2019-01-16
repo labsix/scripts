@@ -42,6 +42,7 @@ main() {
     mksudo andrew
     mksudo jessy
     mksudo curtis
+    mksudo kevin
 
     # Removed users
     #
