@@ -31,6 +31,9 @@ main() {
         'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDEtx6pq9QXt37V7ZJmcp1mW7CLGu3mjFlRoF1E88LM+pvVGQrTawCgNNphJwadu7Pd95Umov/U5dLez24BDja1JaXi9GLFG0xd39YztWqzOCOEyz/Eu2VwHu2luUqd5eK/PYU8WkqdUAijVIxd1z8z9SRgH4SBQK3mSw2qIZrzWe3y/0OK8CqB0GBjr/X0nAuxT367+PnGnB0PhArUDWLWUqQeLyu4xHcJ/lr9VvHj8M1atmD+hHOpEnIcxvkUyl7xhU0BbDMfWI0cMaS0RjPG6qLK/NRC1uyDEX4jRC7tP4QxXtWcWLrXph10ipplk4MdB0ImzOViWFtuxnkPvn48VD6k5gm1VbU8OSNdx8htu9KHXOY0cuX5/IgWQUK1SVAOq4mD2FfaRz2o8WaDV0JFo7kF9kEM52AwdJUbtyVfIR+qQuhuCdFTY6MsQPdjVKYVwxycxupckhV2xob9X+F8LZGXngDavN1gz2J9yF2CHEdAzl6xFJ86AJIc5aTG5lLApwdiFD2bV0nfn+a51r8sh0YMrwEAbB4tbWTBwch8/TrtXmovHLTSp9nBv7PWB8Z/VkwvjvZ/VSLk7T7deVRNhSVL5A76WjK4GITHXR2fRF/gU9by0QYq7jQWbeSvFZNbx1GB1u8ZchJnBcl0HUUZOPTsU8mLBzXg7WY2i3ewmQ== cgn@mit.edu' \
         'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDFf4PNCbz7IZfRz9t8e60ZpKRY7EepZGOH9//lNANzLY+UaepTYmX+D0+ZMP1+eu/6rWBb8YE1/EqWa82CUWnMYZOXCRnXy/C/CvmQGe0ftGJUC3vuLY40QSYqmZ+YkpkaCVpZKCNnzLKVAbsyw17QOfjKxXncV+8xeZA8GJO3KjW04GgHv1HiseDo/nsU6mw4GI+aTJG6gDEZ3SFbJk3cxYpusnQ7Za3C7gby/Fb00rMwWxYQe6Mnlzi50Z+SqcxYDA9FgDKTWuyHmQBrkmuPs5hQ5bHBHGWOjULxMeABfwX5DX/ewT2gCQJS+m5ZIoLQA3vG0/duXS/5T2Hlq6y/ curtis.northcutt@gmail.com'
 
+    add lan \
+        'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDa65C38F4BJrZxixRmtg3t4ccFfd6jnL2SZcGUmp/vYRXyvgB739dR9Gp/Kum2n7MZ7832KhjUWC3Xyq5IFvkZgIZyIBOslap8d5dfRbmB2y06iIC50alof3rjTCbXals9DQ/nWnurcy1Zulip5y64FPKxwIroFr3r2ezOSxZFGM/aaqBKmaYe9rUDcx8AjrWQbKHgcvaBFSI6URgAE60iZ0h3urCaFZ1/XSdeqmTrZkEYNSbOJJmWaRe6jwiXfvCR5GuC0ZsLdtOwIdrkD4O+VWUc1yaKfffyoDGz5nOM2gb0ALYQUGpeEAidTUaGSek1pUzm+1PtaPBfG2HAcUZ8WCtnqahzGg0ySVOl2EyjdklQwqHGUms9GXviCkdTMdaTqAyjTTNkwlbMlPrqK2YupcW4yUP0bPLaNsBitxJZni6brN2S55mm9Rxc+dAWLJ0lD58D0sf0C+Sevm+e0Q2Vc1HwkjjrBt/zj9ikSnTVVDN0Mn8z954++rDuqutcgI8QCgCMlOenj6oTmmNruBQrpBU5eGNc/CtdZIQohNeQx74ww3JbxNXHlBTPoH+BR67FWTH1v7r/kpbrfM6rQfLvXwZE+9J7LeEM7VZlscUtYcRSi1IhUt26PCLnWajxeFFU4mbOsBOcL+6pAXV++a4F/uClfbwWHJNzDqC0aVFtKw== marzoev@mit.edu'
+
     # Sudoers
     #
     # Feel free to add yourself to this list, but keep in mind that if you want
@@ -43,6 +46,7 @@ main() {
     mksudo jessy
     mksudo curtis
     mksudo kevin
+    mksudo lan
 
     # Removed users
     #
