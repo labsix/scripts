@@ -53,6 +53,7 @@ main() {
     # Make sure to keep this up to date -- it's important for security.
 
     remove mshumikhin
+    remove bristy
 }
 
 check() {
